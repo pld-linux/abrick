@@ -1,0 +1,113 @@
+--- abrick-1.12-src/hiscore.cpp~	2009-09-29 15:34:13.000000000 +0200
++++ abrick-1.12-src/hiscore.cpp	2009-09-29 15:37:02.000000000 +0200
+@@ -29,7 +29,7 @@
+ HiScores::HiScores()
+ {
+ 	// on Linux use /usr/share/abandoned/hiscore.dat  ?
+-	FILE *fp = fopen("hiscore.dat", "r");
++	FILE *fp = fopen("/var/games/abrick/hiscore.dat", "r");
+ 	if (!fp)
+ 	{
+ 		std::string defaultNames[] = {		// create default hiscore
+@@ -86,7 +86,7 @@
+ {
+ 	// save to file
+ 	// format: NAME#POINTS#SWAPS#
+-	FILE *fp = fopen("hiscore.dat", "w+");
++	FILE *fp = fopen("/var/games/abrick/hiscore.dat", "w+");
+ 	if (fp)
+ 	{
+ 		for (iterator it = begin(); it != end(); ++it)
+diff -u abrick-1.12-src.orig/allmenus.cpp abrick-1.12-src/allmenus.cpp
+--- abrick-1.12-src.orig/allmenus.cpp	2004-12-12 17:39:52.000000000 +0100
++++ abrick-1.12-src/allmenus.cpp	2009-09-29 16:09:42.000000000 +0200
+@@ -11,9 +11,9 @@
+ //-----------------------------------------------------------------------------
+ MainMenu::MainMenu(NjamFont *font_ptr, int x, int y):
+ 	Menu(font_ptr, x, y),
+-	whiteFontM("data/font-white.bmp", 8, 14),
+-	musicM("data/menu.xm"),
+-	gameMusicM("data/main.xm")
++	whiteFontM("/usr/share/abrick/font-white.bmp", 8, 14),
++	musicM("/usr/share/abrick/menu.xm"),
++	gameMusicM("/usr/share/abrick/main.xm")
+ {
+ 	options.push_back("SINGLE PLAYER GAME");
+ 	options.push_back("DUEL GAME");
+Wspólne podkatalogi: abrick-1.12-src.orig/data i abrick-1.12-src/data
+diff -u abrick-1.12-src.orig/game.cpp abrick-1.12-src/game.cpp
+--- abrick-1.12-src.orig/game.cpp	2004-12-12 17:39:52.000000000 +0100
++++ abrick-1.12-src/game.cpp	2009-09-29 16:09:42.000000000 +0200
+@@ -8,13 +8,13 @@
+ extern SDL_Surface *Screen;		// global object
+ //-----------------------------------------------------------------------------
+ Game::Game(int players):
+-	fontM("data/font-white.bmp", 8, 14),
+-	sfxDropM("data/drop.wav"),
+-	sfxLineM("data/line.wav")
++	fontM("/usr/share/abrick/font-white.bmp", 8, 14),
++	sfxDropM("/usr/share/abrick/drop.wav"),
++	sfxLineM("/usr/share/abrick/line.wav")
+ {
+ 	playerCountM = players;
+ 	wallpaperM = 0;
+-	if (!LoadImage(&wallpaperM, "data/back.bmp"))
++	if (!LoadImage(&wallpaperM, "/usr/share/abrick/back.bmp"))
+ 		throw Exiter("Cannot load wallpaper image.");
+ 
+ 	SetupGame();
+Wspólne podkatalogi: abrick-1.12-src.orig/html i abrick-1.12-src/html
+diff -u abrick-1.12-src.orig/main.cpp abrick-1.12-src/main.cpp
+--- abrick-1.12-src.orig/main.cpp	2009-09-29 16:01:02.000000000 +0200
++++ abrick-1.12-src/main.cpp	2009-09-29 16:09:42.000000000 +0200
+@@ -61,7 +61,7 @@
+ 		SDL_WM_SetCaption("Abandoned bricks " AB_VERSION "     http://abrick.sourceforge.net", NULL);
+ 
+ 		printf("done.\nLoading icon...");
+-		icon = SDL_LoadBMP("data/abicon.bmp");
++		icon = SDL_LoadBMP("/usr/share/abrick/abicon.bmp");
+ 		if (!icon)
+ 			throw Exiter(SDL_GetError());
+ 		printf("OK.\n");
+@@ -102,13 +102,13 @@
+ 
+ 		// render some background picture for menu
+ 		SDL_Surface *pattern;
+-		if (!LoadImage(&pattern, "data/back.bmp"))
++		if (!LoadImage(&pattern, "/usr/share/abrick/back.bmp"))
+ 			throw Exiter("Cannot load wallpaper image.");
+ 		PatternFill(pattern, Screen);
+ 		SDL_Flip(Screen);
+ 		SDL_FreeSurface(pattern);
+ 
+-		NjamFont font("data/font-yellow.bmp", 11, 22);
++		NjamFont font("/usr/share/abrick/font-yellow.bmp", 11, 22);
+ 		MainMenu m(&font, 40, 150);
+ 		m.start();
+ 	}
+--- abrick-1.12-src.orig/config.cpp	2004-12-12 17:39:52.000000000 +0100
++++ abrick-1.12-src/config.cpp	2009-09-29 16:39:31.000000000 +0200
+@@ -1,4 +1,5 @@
+ //------------------------------------------------------------------------------
++#include <cstdlib>
+ #include <string>
+ #include <fstream>
+ #include <sstream>
+@@ -122,7 +123,7 @@
+ //-----------------------------------------------------------------------------
+ bool Config::save()
+ {
+-	std::ofstream file("ab.conf");
++	std::ofstream file((string(getenv("HOME")) + "/.abrick.conf").c_str());
+ 	if (!file)
+ 		return false;
+ 
+@@ -138,7 +139,7 @@
+ // this gets called from main() so we're sure config.ini is in the right place
+ bool Config::load()
+ {
+-	std::ifstream file("ab.conf");
++	std::ifstream file((string(getenv("HOME")) + "/.abrick.conf").c_str());
+ 	if (!file)
+ 		return false;
+ 
