@@ -1,0 +1,11 @@
+--- abrick-1.12-src/main.cpp	2009-09-29 16:00:44.000000000 +0200
++++ abrick-1.12-src/main.cpp~	2009-09-29 16:00:06.000000000 +0200
+@@ -37,7 +37,7 @@
+ 
+ 			if (!ok)
+ 			{
+-				printf("Usage: ab [-w] [-h]\n\n -w  start in Windowed mode (as opposed to fullscreen).\n -h  use Hardware surfaces (faster, doesn't work well with all graphic cards).\n");
++				printf("Usage: abrick [-f] [-h]\n\n -f  start in fullscreen mode (dangerous).\n -h  use Hardware surfaces (faster, doesn't work well with all graphic cards).\n");
+ 				return 1;
+ 			}
+ 		}
