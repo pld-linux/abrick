@@ -3,7 +3,7 @@ Summary(hu.UTF-8):	Egy Tetris-klón
 Summary(pl.UTF-8):	Abandoned Bricks to gra typu tetris oparta o SDL
 Name:		abrick
 Version:	1.12
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		X11/Applications/Games
 Source0:	http://dl.sourceforge.net/project/abrick/abrick/abrick-1.12/%{name}-%{version}-src.tar.gz
