@@ -3,7 +3,7 @@ Summary(hu.UTF-8):	Egy Tetris-klón
 Summary(pl.UTF-8):	Abandoned Bricks to gra typu tetris oparta o SDL
 Name:		abrick
 Version:	1.12
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		X11/Applications/Games
 Source0:	http://dl.sourceforge.net/project/abrick/abrick/abrick-1.12/%{name}-%{version}-src.tar.gz
@@ -11,6 +11,7 @@ Source0:	http://dl.sourceforge.net/project/abrick/abrick/abrick-1.12/%{name}-%{v
 Patch0:		%{name}-buildfix.patch
 Patch1:		%{name}-paths.patch
 Patch2:		%{name}-usage.patch
+Patch3:		%{name}-format-security.patch
 URL:		http://abrick.sourceforge.net/
 BuildRequires:	SDL-devel
 BuildRequires:	SDL_image-devel
@@ -59,9 +60,11 @@ linię, przeciwnik otrzymuje dodatkowe śmieci.
 %patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1
+%patch -P3 -p1
 
 %build
-%{__make}
+%{__make} \
+	MY_CFLAGS="%{rpmcppflags} %{rpmcxxflags} $(sdl-config --cflags)"
 
 %install
 rm -rf $RPM_BUILD_ROOT
